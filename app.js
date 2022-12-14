@@ -41,6 +41,7 @@ function deleteAllTasks(event){
     ul.removeChild(ul.firstElementChild)
      }
     ul.innerHTML = ''
+    localStorage.removeItem('tasks')
     event.preventDefault()
 }
 function deleteTask(event){
