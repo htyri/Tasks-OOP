@@ -1,7 +1,9 @@
 const form = document.querySelector('form')
 form.addEventListener('submit', addTask)
+
 const ul = document.querySelector('ul')
 ul.addEventListener('click', deleteTask)
+
 const deleteTasks = document.querySelector('#clear-all-tasks')
 deleteTasks.addEventListener('click', deleteAllTasks)
 
@@ -35,9 +37,9 @@ function getTasks(event){
 }
 
 function deleteAllTasks(event){
-    // while(ul.firstElementChild){
-    //     ul.removeChild(ul.firstElementChild)
-    // }
+    while(ul.firstElementChild){
+    ul.removeChild(ul.firstElementChild)
+     }
     ul.innerHTML = ''
     event.preventDefault()
 }
@@ -45,9 +47,28 @@ function deleteTask(event){
     if(event.target.textContent === 'X'){
         if(confirm('Are you sure to delete this task?')){
             event.target.parentElement.remove()
+            //get task value from dom li element textContent
+            let liText = event.target.parentElement.textContent
+            let liTextCorrect = liText.slice(0, liText.length-1)
+
+            let tasks // array for user inputs
+            if(localStorage.getItem('tasks') === null){
+                tasks = []
+            } else {
+                tasks = JSON.parse(localStorage.getItem('tasks'))
+            }
+
+            tasks.forEach(function(task, index){
+                if(task === liTextCorrect){
+                    tasks.splice(index, 1)
+                }
+            })
+            localStorage.setItem('tasks', JSON.stringify(tasks))
         }
     }
+    event.preventDefault()
 }
+
 function addTask(event) {
     // user input
     const taskText = document.querySelector('#task').value
@@ -65,6 +86,7 @@ function addTask(event) {
     ul.appendChild(li)
     // add DOM element - end
     // add task to localStorage
+
     let tasks // array for user inputs
     if(localStorage.getItem('tasks') === null){
         tasks = []
